@@ -1,0 +1,14 @@
+LEARNING RULE
+    Wij = Wij + ŋ(Tj - Yj) * Xi
+    weight = weight + learningRate(target - output) * input         multiplying by input to maintain right sign, if input was negative, somethingsomething
+
+BIAS INPUT
+    A node with value -1 connected to all neurons. By regulating this, one can avoid the problem of having a neuron fire when the input is 0.
+
+CONFUSION MATRIX
+        C1  C2  C3              Used to see how well the ANN has performed
+    C1  1   0   0
+    C2  0   1   0               Y = TARGETS, X = OUTPUTS
+    C3  0   0   1               ALLA RETT!!
+
+
