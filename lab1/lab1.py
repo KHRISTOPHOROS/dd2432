@@ -6,6 +6,34 @@ import mlp
 import random
 f = open('class1','r')
 
+
+
+nrOfPoints = 12 #MUST BE EVEN
+
+def generateClass1(nrOfPointsIn):
+    points = numpy.random.randn(nrOfPointsIn/2,3)
+    points = points*2+1
+    points[:,2] = 0
+
+    f = open('class1','w')
+    f.write(str(nrOfPoints/2))
+    f.write('\n')
+
+    for i in points:
+        for j in i:
+            f.write(str(j))
+            f.write('\n')
+    f.close()
+    return
+
+#CREATE NEW CLASS ONE IF USER CHANGES nrOfPoints
+if( double(f.readline()) != nrOfPoints/2 ):
+    f.close()
+    generateClass1(nrOfPoints)
+    f = open('class1','r')
+    f.readline()
+
+
 scale = double(raw_input("Scale for class2: "))
 center = double(raw_input("Center for class2: "))
 nhidden = int(raw_input("Number of hidden: "))
@@ -15,14 +43,12 @@ eta = double(raw_input("Eta: "))
 iterations = int(raw_input("Iterations: "))
 
 #CREATE CLASSES
-class1 = numpy.random.randn(50,3)
+class1 = numpy.random.randn(nrOfPoints/2,3)
 for i in range(len(class1)):
     for j in range(3):
         class1[i,j] = double(f.readline())
 
-print class1
-
-class2 = numpy.random.randn(50,3)
+class2 = numpy.random.randn(nrOfPoints/2,3)
 class2 = class2*scale+center
 class2[:,2] = 1
 
@@ -33,21 +59,11 @@ order = range(numpy.shape(dataset)[0])
 random.shuffle(order)
 dataset = dataset[order,:]
 
-#CReATE TRAINDATA, VALIDATIONDATA, TESTDATA
-train = dataset[0:50,0:2]
+#CReATE TRAINDATA AND TARGETDATA
+train = dataset[0:nrOfPoints,0:2]
 traint = numpy.zeros((len(train),1))
-indices = numpy.where(dataset[0:50,2]==1)
+indices = numpy.where(dataset[0:nrOfPoints,2]==1)
 traint[indices,0] = 1
-
-valid = dataset[50:75,0:2]
-validt = numpy.zeros((len(valid),1))
-indices = numpy.where(dataset[50:75,2]==1)
-validt[indices,0] = 1
-
-test = dataset[75:100,0:2]
-testt = numpy.zeros((len(train),1))
-indices = numpy.where(dataset[75:100,2]==1)
-testt[indices,0] = 1;
 
 #TRAINING!!!
 ANN = mlp.mlp(train,traint,nhidden,beta,momentum)
@@ -74,3 +90,6 @@ pylab.contour(xRange,yRange,indicator, (0.5,))
 #pylab.plot(0, 1, 'o', 1, 0, 'o',1,1,'o',0,0,'o')
 pylab.plot(class1[:,0], class1[:,1], 'o',class2[:,0], class2[:,1],'o')
 pylab.show()
+
+
+
